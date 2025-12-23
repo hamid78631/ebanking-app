@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebf1318b-72b4-4b7d-a0f3-848a740b1e7f" name="Changes" comment="" />
+    <list default="true" id="ebf1318b-72b4-4b7d-a0f3-848a740b1e7f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebanking-backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/EbankingBackendApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/EbankingBackendApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/AccountOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/AccountOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/BankAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/BankAccount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/enums/AccountStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/enums/AccountStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,8 +23,12 @@
       <list>
         <option value="Class" />
         <option value="Enum" />
+        <option value="Interface" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -28,10 +40,15 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.EbankingBackendApplication.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/DELL/IdeaProjects/ebanking-backend&quot;
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DELL/IdeaProjects/ebanking-app&quot;
   }
 }</component>
   <component name="SharedIndexes">
