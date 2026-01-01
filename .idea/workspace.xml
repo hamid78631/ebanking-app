@@ -5,12 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ebf1318b-72b4-4b7d-a0f3-848a740b1e7f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/dtos/AccountHistoryDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/dtos/AccountOperationDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/dtos/BankAccountDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/dtos/CurrentBankAccountDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/dtos/CustomerDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/dtos/SavingBankAccountDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/exceptions/BalanceNotSufficentException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/exceptions/BankAccountExceptionNotFound.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/exceptions/CustomerNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/mapers/BankAccountMappers.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/mapers/BankAccountMappersImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/services/BankAccountService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/services/BankAccountServiceImplementation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/web/BankAccountRestAPI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/web/CustomerRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ebanking-backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/EbankingBackendApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/EbankingBackendApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/AccountOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/AccountOperation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/BankAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/BankAccount.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/enums/AccountStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/enums/AccountStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/CurrentAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/CurrentAccount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/entities/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/repositories/AccountOperationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/repositories/AccountOperationRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ebanking-backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ebanking-backend/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -21,19 +38,26 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
         <option value="Interface" />
+        <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/ebanking-backend/src/main/java/org/banking/ebanking_backend/services/BankAccountServiceImplementation.java" root0="SKIP_INSPECTION" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="36sUaZ4Yz1iW24QSAoA8OYzE9H7" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -51,6 +75,12 @@
     &quot;last_opened_file_path&quot;: &quot;C:/Users/DELL/IdeaProjects/ebanking-app&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.banking.ebanking_backend.dtos" />
+      <recent name="org.banking.ebanking_backend.mapers" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
