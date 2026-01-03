@@ -6,15 +6,14 @@ import org.banking.ebanking_backend.dtos.AccountOperationDTO;
 import org.banking.ebanking_backend.dtos.BankAccountDTO;
 import org.banking.ebanking_backend.exceptions.BankAccountExceptionNotFound;
 import org.banking.ebanking_backend.services.BankAccountService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin("*")
+
 public class BankAccountRestAPI {
     private BankAccountService bankAccountService;
 
