@@ -1,0 +1,55 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+
+      <div class="app-card">
+        <div class="app-card-header">
+          Nouveau Client
+        </div>
+
+        <div class="card-body p-4">
+          <form
+            [formGroup]="newCustomerFormGroup"
+            (ngSubmit)="handleSaveCustomer()"
+          >
+
+            <div class="mb-4">
+              <label class="form-label fw-medium">Nom</label>
+              <input type="text" formControlName="name" class="form-control">
+              <small
+                class="text-danger"
+                *ngIf="newCustomerFormGroup.controls['name'].touched
+                && newCustomerFormGroup.controls['name'].errors"
+              >
+                Minimum 4 caractères requis
+              </small>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-medium">Email</label>
+              <input type="text" formControlName="email" class="form-control">
+              <small
+                class="text-danger"
+                *ngIf="newCustomerFormGroup.controls['email'].touched
+                && newCustomerFormGroup.controls['email'].errors"
+              >
+                Email invalide
+              </small>
+            </div>
+
+            <div class="text-end">
+              <button
+                [disabled]="newCustomerFormGroup.invalid"
+                class="btn-primary-app"
+              >
+                Enregistrer
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

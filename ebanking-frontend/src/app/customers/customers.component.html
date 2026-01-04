@@ -1,33 +1,73 @@
-<div class="container mt-2">
- <ng-container *ngIf="customers | async as listCustomers; else failure">
+<div class="container mt-4">
+  <ng-container *ngIf="customers | async as listCustomers; else failureOrLading">
 
- </ng-container>
-  <ng-template #failure class="text-danger">
-      <div class="text-danger">
-        {{errorMessage}}
+    <div class="app-card">
+      <div class="app-card-header">
+        Liste des Clients
       </div>
-  </ng-template>
-  <div class="card" *ngIf="customers">
-    <div class="card-header">
-      Customers
-    </div>
-    <div class="card-body">
-      <table class="table">
-        <thead>
+
+      <div class="card-body p-4">
+
+        <form
+          *ngIf="searchFormGroup"
+          [formGroup]="searchFormGroup"
+          (ngSubmit)="handleSearchCustomers()"
+          class="mb-4"
+        >
+          <div class="input-group">
+            <input
+              type="text"
+              formControlName="keyword"
+              class="form-control"
+              placeholder="Rechercher un client..."
+            >
+            <button class="btn-primary-app">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+
+        <table class="table table-app">
+          <thead>
           <tr>
-            <th>Id</th>
-            <th>Name</th>
+            <th>ID</th>
+            <th>Nom</th>
             <th>Email</th>
+            <th class="text-end">Actions</th>
           </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let c of customers | async">
-            <td>{{c.id}}</td>
-            <td>{{c.name}}</td>
-            <td>{{c.email}}</td>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let c of listCustomers">
+            <td>{{ c.id }}</td>
+            <td class="fw-semibold">{{ c.name }}</td>
+            <td class="text-muted">{{ c.email }}</td>
+            <td class="text-end">
+              <button
+                (click)="handleDeleteCustomer(c)"
+                class="btn btn-danger-app"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
           </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+
+      </div>
     </div>
-  </div>
+  </ng-container>
+
+  <ng-template #failureOrLading>
+    <div *ngIf="errorMessage; else loading" class="alert alert-danger mt-3">
+      {{ errorMessage }}
+    </div>
+
+    <ng-template #loading>
+      <div class="d-flex align-items-center gap-3 mt-4">
+        <div class="spinner-border text-primary"></div>
+        <span class="fw-medium">Chargement des données…</span>
+      </div>
+    </ng-template>
+  </ng-template>
 </div>
