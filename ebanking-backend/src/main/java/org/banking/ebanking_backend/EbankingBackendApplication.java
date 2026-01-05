@@ -7,8 +7,6 @@ import org.banking.ebanking_backend.dtos.SavingBankAccountDTO;
 import org.banking.ebanking_backend.entities.*;
 import org.banking.ebanking_backend.enums.AccountStatus;
 import org.banking.ebanking_backend.enums.OperationType;
-import org.banking.ebanking_backend.exceptions.BalanceNotSufficentException;
-import org.banking.ebanking_backend.exceptions.BankAccountExceptionNotFound;
 import org.banking.ebanking_backend.exceptions.CustomerNotFoundException;
 import org.banking.ebanking_backend.repositories.AccountOperationRepository;
 import org.banking.ebanking_backend.repositories.BankAccountRepository;
