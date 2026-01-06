@@ -1,0 +1,23 @@
+<div class="chat-bar" [ngClass]="{'expanded': isOpen}">
+  <div class="chat-header" (click)="toggleChat()">
+    <div class="header-info">
+      <span class="status-dot"></span>
+      <strong>Assistant Bancaire</strong>
+    </div>
+    <span class="toggle-icon">{{ isOpen ? '▼' : '▲' }}</span>
+  </div>
+
+  <div class="chat-content" *ngIf="isOpen">
+    <div class="chat-messages">
+      <div *ngFor="let msg of messages" [ngClass]="msg.isUser ? 'user-msg' : 'ai-msg'">
+        <div class="bubble">{{ msg.text }}</div>
+      </div>
+      <div *ngIf="isTyping" class="typing">L'IA écrit...</div>
+    </div>
+
+    <div class="chat-input">
+      <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Posez votre question...">
+      <button (click)="sendMessage()" [disabled]="!userInput.trim()">➤</button>
+    </div>
+  </div>
+</div>

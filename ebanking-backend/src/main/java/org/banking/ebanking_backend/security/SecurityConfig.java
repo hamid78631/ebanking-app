@@ -52,28 +52,37 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(ar -> ar.requestMatchers("/login/**").permitAll())
-                .authorizeHttpRequests(ar -> ar.anyRequest().authenticated())
-                .oauth2ResourceServer(oa -> oa.jwt(Customizer.withDefaults()))
+                .cors(Customizer.withDefaults())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/chat", "/chat/**").permitAll()
+                        .requestMatchers("/login/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(Customizer.withDefaults())
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            // Ne pas bloquer les routes publiques
+                            String requestURI = request.getRequestURI();
+                            if (requestURI.startsWith("/chat") || requestURI.startsWith("/login")) {
+                                return;
+                            }
+                            response.sendError(401, "Unauthorized");
+                        })
+                )
                 .build();
     }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Autorise votre Angular local
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        // Autorise toutes les méthodes HTTP nécessaires
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        // Headers indispensables pour l'authentification et le format de données
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
-        // Permet au frontend de lire le header Authorization si besoin
         configuration.setExposedHeaders(List.of("Authorization"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
