@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BankAccountMappers {
 
-    // Convertir Entity → DTO (Customer)
+
     public CustomerDTO fromCustomer(Customer customer) {
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(customer, customerDTO);

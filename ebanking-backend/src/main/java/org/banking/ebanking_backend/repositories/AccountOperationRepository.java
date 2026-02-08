@@ -11,6 +11,5 @@ public interface AccountOperationRepository extends JpaRepository<AccountOperati
 
     List<AccountOperation> findByBankAccountId(String bankAccountId);
 
-    // Spring utilisera maintenant cet objet pour générer les clauses "LIMIT" et "OFFSET" en SQL
     Page<AccountOperation> findByBankAccountId(String bankAccountId, Pageable pageable);
 }

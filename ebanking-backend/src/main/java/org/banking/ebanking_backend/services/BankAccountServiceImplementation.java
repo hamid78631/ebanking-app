@@ -173,7 +173,6 @@ public class BankAccountServiceImplementation implements BankAccountService {
     public AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountExceptionNotFound {
         BankAccount bankAccount = bankAccountRepository.findById(accountId).orElseThrow(() -> new BankAccountExceptionNotFound("Account not found"));
 
-        // CORRECTION : Utilisation de l'import correct et suppression du cast inutile
         Pageable pageable = PageRequest.of(page, size);
         Page<AccountOperation> accountOperations = accountOperationRepository.findByBankAccountId(accountId, pageable);
 
