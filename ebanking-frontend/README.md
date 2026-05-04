@@ -1,27 +1,81 @@
-# EbankingFrontend
+# e-banking — Digital Banking Platform
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.11.
+A full-stack digital banking platform built with **Spring Boot** (backend) and **Angular** (frontend), designed to manage customers, bank accounts, and financial operations in a clean and modern interface.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Features
 
-## Code scaffolding
+- **Dashboard** — Real-time overview of customers, accounts, total balance, and account type distribution
+- **Customer Management** — Create, search, edit, and delete customers; view their accounts in a side panel
+- **Account Management** — Create current (with overdraft) and saving (with interest rate) accounts per customer
+- **Banking Operations** — Debit, credit, and transfer between accounts with full transaction history
+- **AI Chatbot** — Integrated assistant powered by Google Gemini (Spring AI)
+- **Responsive UI** — Light theme with a professional red palette, horizontal navigation, and Plus Jakarta Sans typography
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## Tech Stack
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Backend
+- Java 21 (Temurin)
+- Spring Boot 3.4.1
+- Spring Data JPA (H2 in-memory database)
+- Spring Security (CORS, stateless)
+- Spring AI — Vertex AI Gemini
 
-## Running unit tests
+### Frontend
+- Angular 15+
+- TypeScript
+- RxJS (`forkJoin`, `Observable`)
+- Reactive Forms
+- Bootstrap Icons
+- Google Fonts — Plus Jakarta Sans
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
+## Getting Started
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Backend
 
-## Further help
+```bash
+cd ebanking-backend
+./mvnw spring-boot:run
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+The API is available at `http://localhost:8085`.
+
+### Frontend
+
+```bash
+cd ebanking-frontend
+npm install
+ng serve
+```
+
+The app is available at `http://localhost:4200`.
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/customers` | List all customers |
+| GET | `/customers/search?keyword=` | Search customers |
+| POST | `/customers` | Create a customer |
+| PUT | `/customers/{id}` | Update a customer |
+| DELETE | `/customers/{id}` | Delete a customer |
+| GET | `/accounts` | List all accounts |
+| GET | `/accounts/{id}/pageOperations` | Paginated transaction history |
+| POST | `/accounts/current` | Create a current account |
+| POST | `/accounts/saving` | Create a saving account |
+| POST | `/accounts/debit` | Debit an account |
+| POST | `/accounts/credit` | Credit an account |
+| POST | `/accounts/transfer` | Transfer between accounts |
+
+---
+
+## Author
+
+Hamid — [hamidoumamoudou125@icloud.com](mailto:hamidoumamoudou125@icloud.com)

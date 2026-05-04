@@ -1,23 +1,31 @@
-<div class="chat-bar" [ngClass]="{'expanded': isOpen}">
-  <div class="chat-header" (click)="toggleChat()">
-    <div class="header-info">
-      <span class="status-dot"></span>
-      <strong>Assistant Bancaire</strong>
-    </div>
-    <span class="toggle-icon">{{ isOpen ? '▼' : '▲' }}</span>
-  </div>
+<div class="chat-widget">
 
-  <div class="chat-content" *ngIf="isOpen">
-    <div class="chat-messages">
-      <div *ngFor="let msg of messages" [ngClass]="msg.isUser ? 'user-msg' : 'ai-msg'">
-        <div class="bubble">{{ msg.text }}</div>
+  <div class="chat-panel" *ngIf="isOpen">
+    <div class="chat-hd">
+      <div class="chat-hd-dot"></div>
+      <span class="chat-hd-title">Assistant IA</span>
+      <button class="chat-hd-close" (click)="toggleChat()"><i class="bi bi-x"></i></button>
+    </div>
+
+    <div class="chat-msgs">
+      <div *ngFor="let msg of messages" class="msg-row" [ngClass]="msg.isUser ? 'user' : 'ai'">
+        <div class="msg-bbl">{{ msg.text }}</div>
       </div>
-      <div *ngIf="isTyping" class="typing">L'IA écrit...</div>
+      <div *ngIf="isTyping" class="msg-row ai">
+        <div class="typing"><span></span><span></span><span></span></div>
+      </div>
     </div>
 
-    <div class="chat-input">
-      <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Posez votre question...">
-      <button (click)="sendMessage()" [disabled]="!userInput.trim()">➤</button>
+    <div class="chat-foot">
+      <input class="chat-inp" [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Posez votre question...">
+      <button class="chat-send" (click)="sendMessage()" [disabled]="!userInput.trim()">
+        <i class="bi bi-send"></i>
+      </button>
     </div>
   </div>
+
+  <button class="chat-fab" (click)="toggleChat()">
+    <i [ngClass]="isOpen ? 'bi bi-x' : 'bi bi-chat-dots'"></i>
+  </button>
+
 </div>

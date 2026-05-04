@@ -1,0 +1,164 @@
+<div class="page">
+
+  <!-- En-tête -->
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Tableau de bord</h1>
+      <p class="page-desc">Vue d'ensemble de la plateforme</p>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <a routerLink="/admin/new-customer" class="btn btn-outline-accent">
+        <i class="bi bi-person-plus"></i> Nouveau client
+      </a>
+      <a routerLink="/admin/accounts" class="btn btn-primary">
+        <i class="bi bi-credit-card"></i> Comptes
+      </a>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-left">
+        <div class="kpi-label">Total clients</div>
+        <div class="kpi-value">{{ totalCustomers }}</div>
+        <div class="kpi-sub">Clients enregistrés</div>
+      </div>
+      <div class="kpi-icon red"><i class="bi bi-people-fill"></i></div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-left">
+        <div class="kpi-label">Total comptes</div>
+        <div class="kpi-value">{{ totalAccounts }}</div>
+        <div class="kpi-sub">{{ currentAccounts }} courants · {{ savingAccounts }} épargne</div>
+      </div>
+      <div class="kpi-icon amber"><i class="bi bi-layers-fill"></i></div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-left">
+        <div class="kpi-label">Solde global</div>
+        <div class="kpi-value" style="font-size:20px;">{{ totalBalance | number:'1.0-0' }} €</div>
+        <div class="kpi-sub">Tous comptes confondus</div>
+      </div>
+      <div class="kpi-icon green"><i class="bi bi-cash-stack"></i></div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-left">
+        <div class="kpi-label">Répartition</div>
+        <div class="kpi-value" style="font-size:18px;">
+          {{ totalAccounts ? ((currentAccounts / totalAccounts) * 100 | number:'1.0-0') : 0 }}%
+        </div>
+        <div class="kpi-sub">de comptes courants</div>
+      </div>
+      <div class="kpi-icon blue"><i class="bi bi-pie-chart-fill"></i></div>
+    </div>
+  </div>
+
+  <!-- Contenu principal -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+
+    <!-- Derniers comptes -->
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <p class="panel-title">Derniers comptes</p>
+          <p class="panel-meta">Comptes récemment créés</p>
+        </div>
+        <a routerLink="/admin/accounts" class="btn btn-ghost btn-sm">
+          <i class="bi bi-arrow-right"></i> Voir tout
+        </a>
+      </div>
+
+      <div *ngIf="loading" class="empty">
+        <p class="empty-title">Chargement...</p>
+      </div>
+
+      <div *ngIf="!loading && recentAccounts.length === 0" class="empty">
+        <i class="bi bi-inbox"></i>
+        <p class="empty-title">Aucun compte</p>
+      </div>
+
+      <div *ngIf="!loading && recentAccounts.length > 0">
+        <div *ngFor="let a of recentAccounts"
+             class="mini-account"
+             style="margin:8px;cursor:pointer;"
+             (click)="goToAccount(a.id)">
+          <div class="mini-account-left">
+            <div class="mini-account-type">
+              <span class="badge" [ngClass]="a.type === 'CurrentAccount' ? 'badge-blue' : 'badge-amber'">
+                {{ a.type === 'CurrentAccount' ? 'Courant' : 'Épargne' }}
+              </span>
+            </div>
+            <div class="mini-account-id" style="margin-top:4px;">{{ a.id }}</div>
+            <div style="font-size:11px;color:var(--tx-3);margin-top:2px;" *ngIf="a.customerDTO">
+              <i class="bi bi-person"></i> {{ a.customerDTO.name }}
+            </div>
+          </div>
+          <div class="mini-account-balance" [style.color]="a.balance >= 0 ? 'var(--green)' : 'var(--red)'">
+            {{ a.balance | number:'1.2-2' }} €
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clients récents + Actions -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
+
+      <!-- Clients récents -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-title">Clients récents</p>
+            <p class="panel-meta">{{ totalCustomers }} client(s) au total</p>
+          </div>
+          <a routerLink="/admin/customers" class="btn btn-ghost btn-sm">
+            <i class="bi bi-arrow-right"></i> Gérer
+          </a>
+        </div>
+
+        <div *ngIf="!loading && recentCustomers.length > 0">
+          <div *ngFor="let c of recentCustomers"
+               style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background var(--tr);"
+               (mouseenter)="$any($event.currentTarget).style.background='var(--surface-3)'"
+               (mouseleave)="$any($event.currentTarget).style.background=''"
+               (click)="goToCustomer(c.id)">
+            <div class="ava"
+                 [style.background]="'hsl('+(c.id*61%360)+',55%,88%)'"
+                 [style.color]="'hsl('+(c.id*61%360)+',55%,28%)'">
+              {{ c.name.charAt(0).toUpperCase() }}
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:600;font-size:13px;color:var(--tx);">{{ c.name }}</div>
+              <div style="font-size:11.5px;color:var(--tx-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ c.email }}</div>
+            </div>
+            <span class="badge badge-mono">#{{ c.id }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions rapides -->
+      <div class="panel">
+        <div class="panel-header">
+          <p class="panel-title">Actions rapides</p>
+        </div>
+        <div class="panel-body" style="display:flex;flex-direction:column;gap:8px;">
+          <a routerLink="/admin/new-customer" class="btn btn-default" style="justify-content:flex-start;">
+            <i class="bi bi-person-plus"></i> Ajouter un client
+          </a>
+          <a routerLink="/admin/accounts" class="btn btn-default" style="justify-content:flex-start;">
+            <i class="bi bi-search"></i> Rechercher un compte
+          </a>
+          <a routerLink="/admin/customers" class="btn btn-default" style="justify-content:flex-start;">
+            <i class="bi bi-people"></i> Gérer les clients
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

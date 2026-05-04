@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router'; // Import manquant
+import { RouterModule, Routes } from '@angular/router';
 import { CustomersComponent } from './customers/customers.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { NewCustomerComponent } from './new-customer/new-customer.component';
-import { LoginComponent } from './login/login.component';
 import { AdminTemplateComponent } from './admin-template/admin-template.component';
-import { AuthenticationGuard } from './guards/authentication.guard';
-import { AuthorizationGuard } from './guards/authorization.guard';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
-  { path: "login", component: LoginComponent },
-  { path: "", redirectTo: "/login", pathMatch: "full" },
+  { path: "", redirectTo: "/admin/dashboard", pathMatch: "full" },
   {
-    path: "admin", component: AdminTemplateComponent, canActivate: [AuthenticationGuard],
+    path: "admin", component: AdminTemplateComponent,
     children: [
+      { path: "", redirectTo: "dashboard", pathMatch: "full" },
+      { path: "dashboard", component: DashboardComponent },
       { path: "accounts", component: AccountsComponent },
-      { path: "new-customer", component: NewCustomerComponent, canActivate: [AuthorizationGuard] },
+      { path: "new-customer", component: NewCustomerComponent },
+      { path: "edit-customer/:id", component: NewCustomerComponent },
       { path: "customers", component: CustomersComponent },
       { path: "notAuthorized", component: NotAuthorizedComponent }
     ]

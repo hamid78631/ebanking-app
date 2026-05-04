@@ -1,93 +1,202 @@
-<div class="container-fluid py-5 bg-light min-vh-100">
-  <div class="row justify-content-center">
-    <div class="col-12 col-xl-10">
+<div class="page">
 
-      <ng-container *ngIf="customers | async as listCustomers; else failureOrLading">
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Clients</h1>
+      <p class="page-desc">Gestion de la base clients · {{ customers.length }} enregistrement(s)</p>
+    </div>
+    <a routerLink="/admin/new-customer" class="btn btn-primary">
+      <i class="bi bi-person-plus"></i> Nouveau client
+    </a>
+  </div>
 
-          <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
-            <div>
-              <h4 class="fw-bold mb-1 text-dark">Répertoire Clients</h4>
-              <p class="text-muted small mb-0">Gérez les comptes et informations de vos clients</p>
-            </div>
+  <!-- Layout: liste + détail -->
+  <div style="display:grid; gap:16px;"
+       [style.grid-template-columns]="selectedCustomer ? '1fr 360px' : '1fr'">
 
-            <form *ngIf="searchFormGroup" [formGroup]="searchFormGroup" (ngSubmit)="handleSearchCustomers()" class="flex-grow-1 flex-md-grow-0">
-              <div class="input-group shadow-sm rounded-pill overflow-hidden border">
-                <span class="input-group-text bg-white border-0 ps-3 text-muted"><i class="bi bi-search"></i></span>
-                <input type="text" formControlName="keyword" class="form-control border-0 fs-6 shadow-none" placeholder="Nom ou email...">
-                <button class="btn btn-primary px-4 fw-bold">Filtrer</button>
-              </div>
-            </form>
+    <!-- Panneau liste -->
+    <div class="panel">
+      <div class="panel-header">
+        <p class="panel-title">Répertoire</p>
+        <form [formGroup]="searchFormGroup" (ngSubmit)="handleSearchCustomers()">
+          <div class="search-bar">
+            <i class="bi bi-search"></i>
+            <input type="text" formControlName="keyword" placeholder="Rechercher...">
+            <button type="submit" class="search-submit">Filtrer</button>
           </div>
+        </form>
+      </div>
 
-          <div class="card-body p-0">
-            <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light text-muted small text-uppercase ls-1">
-                <tr>
-                  <th class="ps-4 py-3">ID Client</th>
-                  <th class="py-3">Nom Complet</th>
-                  <th class="py-3">Adresse Email</th>
-                  <th class="text-end pe-4 py-3">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let c of listCustomers" class="transition-all">
-                  <td class="ps-4">
-                    <span class="badge bg-light text-dark border font-monospace">#{{ c.id }}</span>
-                  </td>
-                  <td>
-                    <div class="d-flex align-items-center gap-3">
-                      <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 35px; height: 35px;">
-                        {{ c.name.charAt(0) }}
-                      </div>
-                      <span class="fw-bold text-dark">{{ c.name }}</span>
-                    </div>
-                  </td>
-                  <td class="text-muted">{{ c.email }}</td>
-                  <td class="text-end pe-4">
-                    <div class="d-flex justify-content-end gap-2">
-                      <button class="btn btn-light btn-sm rounded-3 border shadow-sm px-3">
-                        <i class="bi bi-eye"></i>
-                      </button>
-                      <button (click)="handleDeleteCustomer(c)" class="btn btn-outline-danger btn-sm rounded-3 px-3 shadow-sm border-2">
-                        <i class="bi bi-trash3"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
+      <div *ngIf="loading" class="empty">
+        <p class="empty-title">Chargement...</p>
+      </div>
 
-            <div class="card-footer bg-white border-0 py-3 text-center">
-              <small class="text-muted">Total : {{ listCustomers.length }} client(s) trouvé(s)</small>
-            </div>
+      <div *ngIf="errorMessage && !loading" class="empty">
+        <i class="bi bi-exclamation-triangle"></i>
+        <p class="empty-title">Erreur</p>
+        <p class="empty-text">{{ errorMessage }}</p>
+        <button class="btn btn-primary" style="margin-top:10px;" (click)="loadData()">
+          <i class="bi bi-arrow-clockwise"></i> Réessayer
+        </button>
+      </div>
+
+      <div *ngIf="!loading && !errorMessage" style="overflow-x:auto;">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Client</th>
+              <th>Email</th>
+              <th style="text-align:right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of customers"
+                style="cursor:pointer; transition:background var(--tr);"
+                [style.background]="selectedCustomer?.id === c.id ? 'var(--surface-2)' : ''"
+                (click)="selectCustomer(c)">
+              <td><span class="badge badge-mono">#{{ c.id }}</span></td>
+              <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <div class="ava"
+                       [style.background]="'hsl('+(c.id*61%360)+',45%,88%)'"
+                       [style.color]="'hsl('+(c.id*61%360)+',50%,30%)'">
+                    {{ c.name.charAt(0).toUpperCase() }}
+                  </div>
+                  <span style="font-weight:500;">{{ c.name }}</span>
+                </div>
+              </td>
+              <td style="color:var(--tx-3); font-size:12px;">{{ c.email }}</td>
+              <td>
+                <div style="display:flex; justify-content:flex-end; gap:4px;">
+                  <button (click)="editCustomer(c); $event.stopPropagation()" class="btn btn-ghost btn-sm">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button (click)="handleDeleteCustomer(c); $event.stopPropagation()" class="btn btn-destructive btn-sm">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="customers.length === 0" class="empty">
+          <i class="bi bi-person-x"></i>
+          <p class="empty-title">Aucun résultat</p>
+          <p class="empty-text">Aucun client ne correspond à votre recherche.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panneau détail client -->
+    <div *ngIf="selectedCustomer" style="display:flex; flex-direction:column; gap:14px;">
+
+      <!-- Fiche client -->
+      <div class="panel">
+        <div class="panel-header">
+          <p class="panel-title">Fiche client</p>
+          <button class="btn btn-ghost btn-sm" (click)="closeDetail()">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="panel-body" style="display:flex; align-items:center; gap:14px; padding-bottom:0;">
+          <div class="ava" style="width:48px; height:48px; font-size:18px; flex-shrink:0;"
+               [style.background]="'hsl('+(selectedCustomer.id*61%360)+',45%,88%)'"
+               [style.color]="'hsl('+(selectedCustomer.id*61%360)+',50%,30%)'">
+            {{ selectedCustomer.name.charAt(0).toUpperCase() }}
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div style="font-weight:700; font-size:15px; color:var(--tx);">{{ selectedCustomer.name }}</div>
+            <div style="font-size:12px; color:var(--tx-3); margin-top:2px;">{{ selectedCustomer.email }}</div>
+            <span class="badge badge-mono" style="margin-top:6px;">#{{ selectedCustomer.id }}</span>
           </div>
         </div>
-      </ng-container>
-
-      <ng-template #failureOrLading>
-        <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
-          <div *ngIf="errorMessage; else loading">
-            <div class="bg-danger bg-opacity-10 text-danger d-inline-block p-4 rounded-circle mb-3">
-              <i class="bi bi-exclamation-triangle fs-1"></i>
-            </div>
-            <h5 class="fw-bold text-dark">Une erreur est survenue</h5>
-            <p class="text-muted mb-4">{{ errorMessage }}</p>
-            <button class="btn btn-primary rounded-pill px-4" (click)="handleSearchCustomers()">Réessayer</button>
-          </div>
-
-          <ng-template #loading>
-            <div class="py-4">
-              <div class="spinner-grow text-primary mb-3" role="status"></div>
-              <h6 class="fw-bold text-dark">Récupération de la liste...</h6>
-              <p class="text-muted small">Veuillez patienter quelques instants</p>
-            </div>
-          </ng-template>
+        <div class="panel-body" style="display:flex; gap:8px; padding-top:12px;">
+          <button class="btn btn-default btn-sm" style="flex:1; justify-content:center;" (click)="editCustomer(selectedCustomer)">
+            <i class="bi bi-pencil"></i> Modifier
+          </button>
+          <button class="btn btn-destructive btn-sm" style="flex:1; justify-content:center;" (click)="handleDeleteCustomer(selectedCustomer)">
+            <i class="bi bi-trash3"></i> Supprimer
+          </button>
         </div>
-      </ng-template>
+      </div>
+
+      <!-- Comptes du client -->
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-title">Comptes</p>
+            <p class="panel-meta">{{ customerAccounts.length }} compte(s)</p>
+          </div>
+          <button class="btn btn-ghost btn-sm" (click)="showCreateForm = !showCreateForm">
+            <i class="bi bi-plus-lg"></i> Nouveau
+          </button>
+        </div>
+
+        <!-- Formulaire création compte -->
+        <div *ngIf="showCreateForm" class="panel-body" style="border-bottom:1px solid var(--bd); background:var(--surface-2); border-radius:0;">
+          <form [formGroup]="createAccountForm" (ngSubmit)="handleCreateAccount()">
+
+            <div class="seg" style="margin-bottom:12px;">
+              <input type="radio" formControlName="accountType" value="current" id="ct">
+              <label for="ct">Courant</label>
+              <input type="radio" formControlName="accountType" value="saving" id="sv">
+              <label for="sv">Épargne</label>
+            </div>
+
+            <div class="field">
+              <label class="label">Solde initial (€)</label>
+              <input type="number" formControlName="initialBalance" class="input" min="0" step="0.01">
+            </div>
+
+            <div class="field" *ngIf="createAccountForm.value.accountType === 'current'">
+              <label class="label">Découvert autorisé (€)</label>
+              <input type="number" formControlName="overdraft" class="input" min="0" step="100">
+            </div>
+
+            <div class="field" *ngIf="createAccountForm.value.accountType === 'saving'">
+              <label class="label">Taux d'intérêt (%)</label>
+              <input type="number" formControlName="interestRate" class="input" min="0" step="0.1">
+            </div>
+
+            <div *ngIf="createError" style="color:var(--red); font-size:12px; margin-bottom:8px;">{{ createError }}</div>
+
+            <div style="display:flex; gap:6px;">
+              <button type="button" class="btn btn-default btn-sm" style="flex:1; justify-content:center;" (click)="showCreateForm=false">Annuler</button>
+              <button type="submit" class="btn btn-primary btn-sm" style="flex:1; justify-content:center;" [disabled]="creatingAccount">
+                <span *ngIf="creatingAccount"><i class="bi bi-hourglass-split"></i></span>
+                <span *ngIf="!creatingAccount"><i class="bi bi-check-lg"></i> Créer</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Liste des comptes -->
+        <div *ngFor="let a of customerAccounts"
+             class="mini-account"
+             style="margin:8px; cursor:pointer;"
+             (click)="goToAccount(a.id)">
+          <div class="mini-account-left">
+            <span class="badge" [ngClass]="a.type === 'CurrentAccount' ? 'badge-blue' : 'badge-amber'">
+              {{ a.type === 'CurrentAccount' ? 'Courant' : 'Épargne' }}
+            </span>
+            <div class="mini-account-id" style="margin-top:4px;">{{ a.id }}</div>
+          </div>
+          <div class="mini-account-balance" [style.color]="a.balance >= 0 ? 'var(--green)' : 'var(--red)'">
+            {{ a.balance | number:'1.2-2' }} €
+          </div>
+        </div>
+
+        <div *ngIf="customerAccounts.length === 0 && !showCreateForm" class="empty" style="padding:16px;">
+          <i class="bi bi-credit-card"></i>
+          <p class="empty-title" style="font-size:13px;">Aucun compte</p>
+          <p class="empty-text" style="font-size:11px;">Cliquez sur "+ Nouveau" pour créer un compte.</p>
+        </div>
+      </div>
 
     </div>
+
   </div>
+
 </div>

@@ -1,55 +1,75 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
+<div class="page">
 
-      <div class="app-card">
-        <div class="app-card-header">
-          Nouveau Client
-        </div>
-
-        <div class="card-body p-4">
-          <form
-            [formGroup]="newCustomerFormGroup"
-            (ngSubmit)="handleSaveCustomer()"
-          >
-
-            <div class="mb-4">
-              <label class="form-label fw-medium">Nom</label>
-              <input type="text" formControlName="name" class="form-control">
-              <small
-                class="text-danger"
-                *ngIf="newCustomerFormGroup.controls['name'].touched
-                && newCustomerFormGroup.controls['name'].errors"
-              >
-                Minimum 4 caractères requis
-              </small>
-            </div>
-
-            <div class="mb-4">
-              <label class="form-label fw-medium">Email</label>
-              <input type="text" formControlName="email" class="form-control">
-              <small
-                class="text-danger"
-                *ngIf="newCustomerFormGroup.controls['email'].touched
-                && newCustomerFormGroup.controls['email'].errors"
-              >
-                Email invalide
-              </small>
-            </div>
-
-            <div class="text-end">
-              <button
-                [disabled]="newCustomerFormGroup.invalid"
-                class="btn-primary-app"
-              >
-                Enregistrer
-              </button>
-            </div>
-
-          </form>
-        </div>
-      </div>
-
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">{{ editMode ? 'Modifier le client' : 'Nouveau client' }}</h1>
+      <p class="page-desc">{{ editMode ? 'Mise à jour des informations' : 'Enregistrement d\'un profil client' }}</p>
     </div>
   </div>
+
+  <div style="display:grid; grid-template-columns:360px 1fr; gap:20px; align-items:start; max-width:720px;">
+
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+          <p class="panel-title">Informations</p>
+          <p class="panel-meta">Champs obligatoires</p>
+        </div>
+      </div>
+      <div class="panel-body">
+        <form [formGroup]="newCustomerFormGroup" (ngSubmit)="handleSaveCustomer()">
+
+          <div class="field">
+            <label class="label" for="f-name">Nom complet</label>
+            <input id="f-name" type="text" formControlName="name" class="input"
+                   placeholder="Ex : Marie Dupont"
+                   [class.err]="newCustomerFormGroup.controls['name'].touched && newCustomerFormGroup.controls['name'].errors">
+            <div class="field-err"
+                 *ngIf="newCustomerFormGroup.controls['name'].touched && newCustomerFormGroup.controls['name'].errors">
+              Minimum 4 caractères
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="f-email">Adresse e-mail</label>
+            <input id="f-email" type="email" formControlName="email" class="input"
+                   placeholder="Ex : marie@exemple.com"
+                   [class.err]="newCustomerFormGroup.controls['email'].touched && newCustomerFormGroup.controls['email'].errors">
+            <div class="field-err"
+                 *ngIf="newCustomerFormGroup.controls['email'].touched && newCustomerFormGroup.controls['email'].errors">
+              Adresse e-mail invalide
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div style="display:flex; justify-content:flex-end; gap:6px;">
+            <a routerLink="/admin/customers" class="btn btn-default">Annuler</a>
+            <button type="submit" [disabled]="newCustomerFormGroup.invalid || saving" class="btn btn-primary">
+              <i class="bi" [ngClass]="saving ? 'bi-hourglass-split' : (editMode ? 'bi-check-lg' : 'bi-check-lg')"></i>
+              {{ saving ? 'Enregistrement...' : (editMode ? 'Mettre à jour' : 'Enregistrer') }}
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:8px; padding-top:4px;">
+      <div class="callout callout-blue" *ngIf="!editMode">
+        <i class="bi bi-info-circle"></i>
+        <span>Une fois créé, associez des comptes bancaires à ce client depuis la section <strong>Clients</strong>.</span>
+      </div>
+      <div class="callout callout-blue" *ngIf="editMode">
+        <i class="bi bi-pencil-square"></i>
+        <span>Vous modifiez le profil d'un client existant. Les comptes associés ne seront pas affectés.</span>
+      </div>
+      <div class="callout callout-green">
+        <i class="bi bi-shield-check"></i>
+        <span>Les données sont chiffrées et conformes aux réglementations bancaires en vigueur.</span>
+      </div>
+    </div>
+
+  </div>
+
 </div>

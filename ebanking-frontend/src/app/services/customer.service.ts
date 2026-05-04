@@ -2,29 +2,34 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Customer } from '../model/customer.model';
+import { environment } from "../../environments/environment";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CustomerService {
-  readonly backendHost: string = "http://localhost:8086";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  public getCustomers(): Observable<Array<Customer>> {
-    return this.http.get<Array<Customer>>(`${this.backendHost}/customers`);
+  getCustomers(): Observable<Customer[]> {
+    return this.http.get<Customer[]>(`${environment.backendHost}/customers`);
   }
 
-  public searchCustomers(keyword: string): Observable<Array<Customer>> {
-    return this.http.get<Array<Customer>>(`${this.backendHost}/customers/search?keyword=${keyword}`);
+  searchCustomers(keyword: string): Observable<Customer[]> {
+    return this.http.get<Customer[]>(`${environment.backendHost}/customers/search?keyword=${keyword}`);
   }
 
-
-  public saveCustomer(customer: Customer): Observable<Customer> {
-    return this.http.post<Customer>(`${this.backendHost}/customers`, customer);
+  getCustomer(id: number): Observable<Customer> {
+    return this.http.get<Customer>(`${environment.backendHost}/customers/${id}`);
   }
 
-  public deleteCustomer(id: number): Observable<any> {
-    return this.http.delete(`${this.backendHost}/customers/${id}`);
+  saveCustomer(customer: Customer): Observable<Customer> {
+    return this.http.post<Customer>(`${environment.backendHost}/customers`, customer);
+  }
+
+  updateCustomer(id: number, customer: Customer): Observable<Customer> {
+    return this.http.put<Customer>(`${environment.backendHost}/customers/${id}`, customer);
+  }
+
+  deleteCustomer(id: number): Observable<any> {
+    return this.http.delete(`${environment.backendHost}/customers/${id}`);
   }
 }

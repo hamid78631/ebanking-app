@@ -1,160 +1,194 @@
-<div class="container-fluid py-5 bg-light min-vh-100">
-  <div class="row g-4 justify-content-center">
+<div class="page">
 
-    <div class="col-12 col-xl-7">
-      <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 20px;">
-        <div class="card-header bg-white border-0 py-4 px-4 d-flex align-items-center justify-content-between">
-          <div>
-            <h4 class="fw-bold mb-0 text-dark">Gestion des Comptes</h4>
-            <p class="text-muted small mb-0">Consultez l'historique et le solde en temps réel</p>
-          </div>
-          <div class="bg-primary bg-opacity-10 p-3 rounded-3">
-            <i class="bi bi-bank2 text-primary fs-4"></i>
-          </div>
-        </div>
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Comptes</h1>
+      <p class="page-desc">Transactions et opérations bancaires</p>
+    </div>
+  </div>
 
-        <div class="card-body px-4 pb-4">
-          <form [formGroup]="accountFormGroup" (ngSubmit)="handleSearchAccount()" class="mb-5">
-            <div class="search-box position-relative">
-              <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border">
-                <span class="input-group-text bg-white border-0 ps-4"><i class="bi bi-search text-muted"></i></span>
-                <input type="text" formControlName="accountId" class="form-control border-0 fs-6 shadow-none" placeholder="Entrez le numéro de compte (ex: ACC-01)...">
-                <button class="btn btn-primary px-5 fw-bold transition-all">Rechercher</button>
+  <div style="display:grid; grid-template-columns:1fr 296px; gap:16px; align-items:start;">
+
+    <!-- Colonne principale -->
+    <div style="display:flex; flex-direction:column; gap:14px; min-width:0;">
+
+      <!-- Recherche -->
+      <div class="panel">
+        <div class="panel-body">
+          <form [formGroup]="accountFormGroup" (ngSubmit)="handleSearchAccount()">
+            <div class="field" style="margin-bottom:0;">
+              <label class="label">Identifiant du compte</label>
+              <div style="display:flex; gap:8px;">
+                <div class="search-bar" style="flex:1;">
+                  <i class="bi bi-search"></i>
+                  <input type="text" formControlName="accountId"
+                         placeholder="UUID ou identifiant du compte..."
+                         style="width:100%;">
+                </div>
+                <button type="submit" class="btn btn-primary">Rechercher</button>
               </div>
             </div>
           </form>
-
-          <ng-template #errorTemplate>
-            <div *ngIf="errorMessage" class="alert alert-custom border-0 bg-danger bg-opacity-10 text-danger p-4 rounded-4 animate__animated animate__headShake">
-              <div class="d-flex align-items-center">
-                <i class="bi bi-exclamation-circle-fill fs-3 me-3"></i>
-                <div>
-                  <h6 class="fw-bold mb-0">Erreur de récupération</h6>
-                  <p class="mb-0 small opacity-75">{{errorMessage}}</p>
-                </div>
-              </div>
-            </div>
-          </ng-template>
-
-          <ng-container *ngIf="accountObservable | async as accountDetails; else errorTemplate">
-            <div class="row g-4 mb-5">
-              <div class="col-md-6">
-                <div class="card bg-dark text-white border-0 shadow rounded-4 p-3 position-relative overflow-hidden">
-                  <div class="position-absolute top-0 end-0 p-3 opacity-25"><i class="bi bi-cpu fs-1"></i></div>
-                  <small class="text-uppercase opacity-50 fw-bold small">ID Compte</small>
-                  <div class="fs-4 fw-mono mt-2">{{accountDetails.accountId}}</div>
-                  <div class="mt-4 d-flex justify-content-between align-items-center">
-                    <span class="small opacity-50">E-Banking System</span>
-                    <i class="bi bi-visa fs-2"></i>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="card bg-white border-dashed border-2 rounded-4 p-3 h-100 d-flex flex-column justify-content-center text-center">
-                  <small class="text-uppercase text-muted fw-bold small mb-1">Solde Disponible</small>
-                  <div class="display-6 fw-bold text-primary">{{accountDetails.balance | number : '1.2-2'}} €</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="d-flex align-items-center justify-content-between mb-3">
-              <h6 class="fw-bold text-dark mb-0">Historique des transactions</h6>
-              <span class="badge bg-light text-dark border px-3">Dernières opérations</span>
-            </div>
-
-            <div class="table-responsive rounded-4">
-              <table class="table table-borderless align-middle shadow-sm bg-white mb-0">
-                <thead class="bg-light">
-                <tr>
-                  <th class="ps-4 py-3 text-muted small">DATE</th>
-                  <th class="py-3 text-muted small">TYPE</th>
-                  <th class="py-3 text-end pe-4 text-muted small">MONTANT</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let op of accountDetails.accountOperationDTOS" class="border-bottom border-light">
-                  <td class="ps-4 py-3">
-                    <div class="fw-medium">{{op.operationDate | date : 'dd MMM yyyy'}}</div>
-                    <div class="text-muted small">{{op.operationDate | date : 'HH:mm'}}</div>
-                  </td>
-                  <td class="py-3">
-                    <div class="d-flex align-items-center">
-                      <div [ngClass]="op.type === 'CREDIT' ? 'bg-success' : 'bg-danger'" class="p-1 rounded-circle me-2 opacity-75" style="width: 8px; height: 8px;"></div>
-                      <span class="fw-bold small">{{op.type}}</span>
-                    </div>
-                  </td>
-                  <td class="py-3 text-end pe-4">
-                      <span [ngClass]="op.type === 'CREDIT' ? 'text-success' : 'text-danger'" class="fw-bold fs-5">
-                        {{op.type === 'DEBIT' ? '-' : '+'}} {{op.amount | number : '1.2-2'}}
-                      </span>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="d-flex justify-content-center mt-4">
-              <div class="btn-group shadow-sm p-1 bg-white rounded-pill">
-                <button *ngFor="let item of [].constructor(accountDetails.totalPages);let page=index"
-                        (click)="gotoPage(page)"
-                        [ngClass]="page==currentPage?'btn-primary':'btn-light text-muted border-0'"
-                        class="btn btn-sm rounded-pill mx-1 px-3 fw-bold transition-all">
-                  {{page + 1}}
-                </button>
-              </div>
-            </div>
-          </ng-container>
         </div>
       </div>
+
+      <!-- Erreur -->
+      <div class="panel" *ngIf="errorMessage && !(accountObservable | async)">
+        <div class="empty">
+          <i class="bi bi-exclamation-circle"></i>
+          <p class="empty-title">Compte introuvable</p>
+          <p class="empty-text">{{ errorMessage }}</p>
+        </div>
+      </div>
+
+      <!-- Résultats -->
+      <ng-container *ngIf="accountObservable | async as acc">
+
+        <!-- Carte compte -->
+        <div class="acct-card">
+          <div class="acct-card-row">
+            <div>
+              <div class="acct-id-label">Compte bancaire</div>
+              <div class="acct-id">{{ acc.accountId }}</div>
+            </div>
+            <span class="acct-type-badge">{{ acc.type || 'Compte' }}</span>
+          </div>
+          <div>
+            <div class="acct-balance-label">Solde disponible</div>
+            <div class="acct-balance"><sup>€</sup>{{ acc.balance | number:'1.2-2' }}</div>
+          </div>
+        </div>
+
+        <!-- Table transactions -->
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="panel-title">Transactions</p>
+              <p class="panel-meta">Page {{ currentPage + 1 }} / {{ acc.totalPages }}</p>
+            </div>
+            <span class="badge badge-blue">{{ acc.accountOperationDTOS?.length || 0 }} op.</span>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Montant</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let op of acc.accountOperationDTOS">
+                  <td>
+                    <span style="font-weight:500; font-size:12.5px;">{{ op.operationDate | date:'dd MMM yyyy' }}</span>
+                    <br><span style="font-size:11px; color:var(--tx-4);">{{ op.operationDate | date:'HH:mm' }}</span>
+                  </td>
+                  <td>
+                    <span class="badge" [ngClass]="op.type==='CREDIT' ? 'badge-green' : 'badge-red'">
+                      <i [ngClass]="op.type==='CREDIT' ? 'bi bi-arrow-down-left' : 'bi bi-arrow-up-right'"></i>
+                      {{ op.type }}
+                    </span>
+                  </td>
+                  <td style="color:var(--tx-3); font-size:12px; max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                    {{ op.description || '—' }}
+                  </td>
+                  <td>
+                    <span style="font-weight:600; font-variant-numeric:tabular-nums; font-size:12.5px;"
+                          [style.color]="op.type==='CREDIT' ? 'var(--green)' : 'var(--red)'">
+                      {{ op.type==='DEBIT' ? '−' : '+' }}{{ op.amount | number:'1.2-2' }} €
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div *ngIf="!acc.accountOperationDTOS?.length" class="empty">
+            <i class="bi bi-inbox"></i>
+            <p class="empty-title">Aucune transaction</p>
+            <p class="empty-text">Ce compte ne présente aucune opération enregistrée.</p>
+          </div>
+
+          <div class="pager" *ngIf="acc.totalPages > 1">
+            <button class="pg-btn" (click)="gotoPage(currentPage-1)" [disabled]="currentPage===0">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="pg-btn"
+                    *ngFor="let x of [].constructor(acc.totalPages); let p=index"
+                    [class.active]="p===currentPage"
+                    (click)="gotoPage(p)">
+              {{ p+1 }}
+            </button>
+            <button class="pg-btn" (click)="gotoPage(currentPage+1)" [disabled]="currentPage===acc.totalPages-1">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+      </ng-container>
+
+      <!-- Aucun compte -->
+      <div class="panel" *ngIf="!(accountObservable | async) && !errorMessage">
+        <div class="empty">
+          <i class="bi bi-credit-card"></i>
+          <p class="empty-title">Aucun compte sélectionné</p>
+          <p class="empty-text">Saisissez un identifiant de compte pour afficher les données.</p>
+        </div>
+      </div>
+
     </div>
 
-    <div class="col-12 col-xl-4" *ngIf="authService.roles.includes('ADMIN')">
-      <div class="card border-0 shadow-lg sticky-top" style="border-radius: 20px; top: 2rem;" *ngIf="accountObservable">
-        <div class="card-header bg-primary py-4 px-4 border-0 rounded-top-20">
-          <h5 class="text-white fw-bold mb-0 text-center text-uppercase ls-1">Action Bancaire</h5>
+    <!-- Panneau opération -->
+    <div *ngIf="accountObservable | async" style="position:sticky; top:0;">
+      <div class="panel">
+        <div class="panel-header" style="background:var(--sb-bg); border-radius:8px 8px 0 0; border-bottom-color:rgba(255,255,255,0.07);">
+          <div>
+            <p class="panel-title" style="color:rgba(255,255,255,0.85); font-size:12.5px;">Nouvelle opération</p>
+            <p class="panel-meta" style="color:rgba(255,255,255,0.35);">Débit · Crédit · Virement</p>
+          </div>
         </div>
-        <div class="card-body p-4">
+
+        <div class="panel-body">
           <form [formGroup]="operationFromGroup" (ngSubmit)="handleAccountOperation()">
 
-            <div class="btn-group w-100 mb-4 p-1 bg-light rounded-3">
-              <input type="radio" class="btn-check" formControlName="operationType" value="DEBIT" id="debit" checked>
-              <label class="btn btn-outline-primary border-0 rounded-3 fw-bold py-2" for="debit">Débit</label>
-
-              <input type="radio" class="btn-check" formControlName="operationType" value="CREDIT" id="credit">
-              <label class="btn btn-outline-primary border-0 rounded-3 fw-bold py-2" for="credit">Crédit</label>
-
-              <input type="radio" class="btn-check" formControlName="operationType" value="TRANSFER" id="transfer">
-              <label class="btn btn-outline-primary border-0 rounded-3 fw-bold py-2" for="transfer">Virement</label>
+            <div class="seg">
+              <input type="radio" formControlName="operationType" value="DEBIT" id="d">
+              <label for="d">Débit</label>
+              <input type="radio" formControlName="operationType" value="CREDIT" id="c">
+              <label for="c">Crédit</label>
+              <input type="radio" formControlName="operationType" value="TRANSFER" id="t">
+              <label for="t">Virement</label>
             </div>
 
-            <div class="mb-4 animate__animated animate__fadeIn" *ngIf="operationFromGroup.value.operationType=='TRANSFER'">
-              <label class="form-label fw-bold text-secondary small">Compte de Destination</label>
+            <div class="field" *ngIf="operationFromGroup.value.operationType==='TRANSFER'">
+              <label class="label">Compte destinataire</label>
+              <input type="text" formControlName="accountDestination" class="input" placeholder="ID du compte cible">
+            </div>
+
+            <div class="field">
+              <label class="label">Montant</label>
               <div class="input-group">
-                <span class="input-group-text bg-white border-end-0"><i class="bi bi-send text-primary"></i></span>
-                <input type="text" formControlName="accountDestination" class="form-control bg-light border-start-0" placeholder="ID du bénéficiaire">
+                <span class="input-addon" style="font-weight:600;">€</span>
+                <input type="number" formControlName="amount" class="input" placeholder="0.00" min="0" step="0.01">
               </div>
             </div>
 
-            <div class="mb-4">
-              <label class="form-label fw-bold text-secondary small">Montant de la Transaction</label>
-              <div class="input-group input-group-lg">
-                <span class="input-group-text bg-white border-end-0 fw-bold text-muted">€</span>
-                <input type="number" formControlName="amount" class="form-control bg-light border-start-0 fw-bold" placeholder="0.00">
-              </div>
+            <div class="field">
+              <label class="label">Description</label>
+              <textarea formControlName="description" class="input" rows="3" placeholder="Motif de l'opération..."></textarea>
             </div>
 
-            <div class="mb-5">
-              <label class="form-label fw-bold text-secondary small">Motif / Description</label>
-              <textarea formControlName="description" class="form-control bg-light border-0" rows="3" placeholder="Indiquez le motif de l'opération..."></textarea>
-            </div>
-
-            <button class="btn btn-primary btn-lg w-100 py-3 rounded-4 shadow fw-bold transition-all transform-active">
-              Valider l'opération <i class="bi bi-check2-circle ms-2"></i>
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+              Valider l'opération
             </button>
+
           </form>
         </div>
       </div>
     </div>
 
   </div>
+
 </div>

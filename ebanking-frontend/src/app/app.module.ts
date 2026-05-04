@@ -15,6 +15,7 @@ import { AdminTemplateComponent } from './admin-template/admin-template.componen
 import { AppHttpInterceptor } from './interceptors/app-http.interceptor';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { ChatBotComponent } from './chat-bot/chat-bot.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -26,14 +27,15 @@ import { ChatBotComponent } from './chat-bot/chat-bot.component';
     LoginComponent,
     AdminTemplateComponent,
     NotAuthorizedComponent,
-    ChatBotComponent
+    ChatBotComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule, // Déclaré une seule fois ici désormais
+    FormsModule,
     CommonModule
   ],
   providers: [

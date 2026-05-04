@@ -1,18 +1,15 @@
 package org.banking.ebanking_backend.entities;
 
-import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-@EqualsAndHashCode(callSuper = true)
+
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @DiscriminatorValue("CA")
-public class CurrentAccount extends BankAccount{
+public class CurrentAccount extends BankAccount {
     private double overdraft;
+
+    public CurrentAccount() {}
+
+    public double getOverdraft() { return overdraft; }
+    public void setOverdraft(double overdraft) { this.overdraft = overdraft; }
 }

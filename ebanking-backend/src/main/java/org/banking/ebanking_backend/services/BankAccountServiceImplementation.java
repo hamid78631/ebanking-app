@@ -1,10 +1,12 @@
 package org.banking.ebanking_backend.services;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.banking.ebanking_backend.dtos.*;
-import org.banking.ebanking_backend.entities.*;
+import org.banking.ebanking_backend.entities.AccountOperation;
+import org.banking.ebanking_backend.entities.BankAccount;
+import org.banking.ebanking_backend.entities.CurrentAccount;
+import org.banking.ebanking_backend.entities.Customer;
+import org.banking.ebanking_backend.entities.SaveAccount;
 import org.banking.ebanking_backend.enums.AccountStatus;
 import org.banking.ebanking_backend.enums.OperationType;
 import org.banking.ebanking_backend.exceptions.BalanceNotSufficentException;
@@ -16,7 +18,7 @@ import org.banking.ebanking_backend.repositories.BankAccountRepository;
 import org.banking.ebanking_backend.repositories.CustomerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable; // <-- CORRECTION : Import correct
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -26,14 +28,24 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-@AllArgsConstructor
-@Slf4j
 public class BankAccountServiceImplementation implements BankAccountService {
 
-    private BankAccountRepository bankAccountRepository;
-    private CustomerRepository customerRepository;
-    private AccountOperationRepository accountOperationRepository;
-    private BankAccountMappers  dtoMapper ;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(BankAccountServiceImplementation.class);
+
+    private final BankAccountRepository bankAccountRepository;
+    private final CustomerRepository customerRepository;
+    private final AccountOperationRepository accountOperationRepository;
+    private final BankAccountMappers dtoMapper;
+
+    public BankAccountServiceImplementation(BankAccountRepository bankAccountRepository,
+                                            CustomerRepository customerRepository,
+                                            AccountOperationRepository accountOperationRepository,
+                                            BankAccountMappers dtoMapper) {
+        this.bankAccountRepository = bankAccountRepository;
+        this.customerRepository = customerRepository;
+        this.accountOperationRepository = accountOperationRepository;
+        this.dtoMapper = dtoMapper;
+    }
 
     @Override
     public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
@@ -69,11 +81,6 @@ public class BankAccountServiceImplementation implements BankAccountService {
         saveAccount.setInterestRate(interestRate);
         SaveAccount savedBankAccount = bankAccountRepository.save(saveAccount);
         return dtoMapper.fromSavingBankAccount(savedBankAccount);
-    }
-
-    @Override
-    public BankAccount saveCurrentBankAccount(double initialBalance, Long customerId) throws CustomerNotFoundException {
-        return null;
     }
 
     @Override

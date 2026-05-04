@@ -1,69 +1,29 @@
-<nav class="navbar navbar-expand-lg sticky-top bg-white border-bottom border-light shadow-sm py-3">
-  <div class="container">
+<nav class="topnav">
 
-    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/admin">
-      <div class="bg-primary bg-gradient rounded-3 p-2 d-flex align-items-center justify-content-center shadow-sm" style="width: 40px; height: 40px;">
-        <i class="bi bi-bank2 text-white fs-5"></i>
-      </div>
-      <span class="fw-bold fs-4 tracking-tight text-dark">Banking<span class="text-primary">App</span></span>
-    </a>
-
-    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="mainNavbar">
-
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-        <li class="nav-item px-2">
-          <a class="nav-link fw-semibold px-3 rounded-pill transition-all" routerLinkActive="bg-primary bg-opacity-10 text-primary active" [routerLinkActiveOptions]="{exact: true}" routerLink="/admin">
-            <i class="bi bi-house-door me-1"></i> Accueil
-          </a>
-        </li>
-        <li class="nav-item px-2">
-          <a class="nav-link fw-semibold px-3 rounded-pill transition-all" routerLinkActive="bg-primary bg-opacity-10 text-primary active" routerLink="/admin/customers">
-            <i class="bi bi-people me-1"></i> Clients
-          </a>
-        </li>
-        <li class="nav-item px-2">
-          <a class="nav-link fw-semibold px-3 rounded-pill transition-all" routerLinkActive="bg-primary bg-opacity-10 text-primary active" routerLink="/admin/accounts">
-            <i class="bi bi-wallet2 me-1"></i> Comptes
-          </a>
-        </li>
-
-        <li class="nav-item dropdown px-2">
-          <a class="nav-link dropdown-toggle fw-semibold px-3 rounded-pill transition-all" href="#" id="actDrop" role="button" data-bs-toggle="dropdown">
-            <i class="bi bi-gear me-1"></i> Actions
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-3 p-2 rounded-4" aria-labelledby="actDrop">
-            <li>
-              <a class="dropdown-item rounded-3 py-2" routerLink="/admin/customers">
-                <i class="bi bi-search me-2 text-muted"></i> Rechercher client
-              </a>
-            </li>
-            <li *ngIf="authService.roles.includes('ADMIN')">
-              <hr class="dropdown-divider opacity-50">
-              <a class="dropdown-item rounded-3 py-2 text-primary fw-bold" routerLink="/admin/new-customer">
-                <i class="bi bi-person-plus-fill me-2"></i> Nouveau client
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-
-      <div class="d-flex align-items-center gap-3 ms-lg-auto pt-3 pt-lg-0 border-top border-light border-lg-0">
-        <div class="d-flex align-items-center gap-2 px-3 py-2 bg-light rounded-pill border" *ngIf="authService.isAuthenticated">
-          <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
-            <span class="text-white small fw-bold text-uppercase">{{authService.username?.charAt(0)}}</span>
-          </div>
-          <span class="fw-bold text-dark small">{{authService.username}}</span>
-        </div>
-
-        <button (click)="handleLogout()" class="btn btn-outline-danger btn-sm px-4 rounded-pill fw-bold border-2 transition-all shadow-sm">
-          <i class="bi bi-box-arrow-right me-1"></i> Déconnexion
-        </button>
-      </div>
-
-    </div>
+  <div class="tnav-brand">
+    <div class="tnav-logo"><i class="bi bi-bank2"></i></div>
+    <span class="tnav-name">e-banking</span>
+    <span class="tnav-tag">v1.0</span>
   </div>
+
+  <div class="tnav-links">
+    <a class="tnav-link" routerLink="/admin/dashboard" routerLinkActive="active">
+      <i class="bi bi-grid-1x2"></i> Tableau de bord
+    </a>
+    <a class="tnav-link" routerLink="/admin/customers" routerLinkActive="active">
+      <i class="bi bi-people"></i> Clients
+    </a>
+    <a class="tnav-link" routerLink="/admin/accounts" routerLinkActive="active">
+      <i class="bi bi-credit-card"></i> Comptes
+    </a>
+  </div>
+
+  <div class="tnav-actions">
+    <a class="tnav-btn" routerLink="/admin/new-customer">
+      <i class="bi bi-plus-lg"></i> Nouveau client
+    </a>
+    <div class="tnav-divider"></div>
+    <div class="tnav-avatar">A</div>
+  </div>
+
 </nav>

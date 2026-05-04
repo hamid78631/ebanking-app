@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../services/customer.service';
-// CORRECTION : Import du Router pour la redirection
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-customer',
@@ -11,33 +10,46 @@ import { Router } from '@angular/router';
 })
 export class NewCustomerComponent implements OnInit {
   newCustomerFormGroup!: FormGroup;
+  editMode = false;
+  editId: number | null = null;
+  saving = false;
 
-  // CORRECTION : Injection du Router dans le constructeur
   constructor(
     private fb: FormBuilder,
     private customerService: CustomerService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.newCustomerFormGroup = this.fb.group({
-      name: this.fb.control(null, [Validators.required, Validators.minLength(4)]),
+      name:  this.fb.control(null, [Validators.required, Validators.minLength(4)]),
       email: this.fb.control(null, [Validators.required, Validators.email])
     });
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.editMode = true;
+      this.editId = +id;
+      this.customerService.getCustomer(this.editId).subscribe({
+        next: c => this.newCustomerFormGroup.patchValue({ name: c.name, email: c.email }),
+        error: err => console.error(err)
+      });
+    }
   }
 
   handleSaveCustomer(): void {
-    let customer = this.newCustomerFormGroup.value;
-    this.customerService.saveCustomer(customer).subscribe({
-      next: data => {
-        alert("Customer has been saved successfully!");
-        this.newCustomerFormGroup.reset();
-        // Redirection vers la page des clients après succès
-        this.router.navigateByUrl("/customers");
+    if (this.newCustomerFormGroup.invalid) return;
+    this.saving = true;
+    const customer = this.newCustomerFormGroup.value;
+    const obs = this.editMode && this.editId
+      ? this.customerService.updateCustomer(this.editId, customer)
+      : this.customerService.saveCustomer(customer);
+    obs.subscribe({
+      next: () => {
+        this.saving = false;
+        this.router.navigateByUrl('/admin/customers');
       },
-      error: err => {
-        console.error(err);
-      }
+      error: err => { console.error(err); this.saving = false; }
     });
   }
 }
